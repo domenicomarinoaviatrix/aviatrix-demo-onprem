@@ -21,10 +21,12 @@ provider "aws" {
 }
 
 # Call the Module and provide necessary info
-# public connections (using public EIP) and private connections (using private IP over DX or VPC peering) are defined separately to allow mix-and-match
+# public connections (using public EIP) and 
+# private connections (using private IP over DX or VPC peering) 
+# are defined separately to allow mix-and-match
 # format for the connection definition is: 
-# "<Aviatrix Transit Gateway Name>:<Aviatrix Transit Gateway BGP AS Number>:<Number of tunnels ***This currently only supports 1***>"
-# NOTE: Number of tunnels parameter is reserved for future use to support multi-vrf use-cases, but currently can only be set to 1.
+# "<avx gw name>:<avx gw bgp as>:<num tunnels ***currently only supports 1***>"
+# NOTE: Please currently set num tunnels to 1. It is reserved for future use
 module "demo-onprem-1" {
   source                                = "github.com/gleyfer/aviatrix-demo-onprem"
   providers                             = { aws = aws.use1 }
