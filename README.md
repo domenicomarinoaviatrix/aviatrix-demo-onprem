@@ -1,4 +1,4 @@
-# EzCSR
+# Aviatrix-Demo-Onprem
 
 This module simplifies the creation of a CSR1KV in AWS with with External Connections to Aviatrix Gateways for simulating on-prem environments. The resources created by the module are pictured below:
 
@@ -6,7 +6,7 @@ This module simplifies the creation of a CSR1KV in AWS with with External Connec
 
 # Instructions
 
-This Module requires the AWS Provider and Aviatrix Providers to be defined and configured in the root module. The Module accepts Aviatrix Transit Gateway data sources as inputs and automatically creates the external connections on the Aviatrix Controller and configures the CSR with the correct crypto settings and Tunnels. Module invocation looks like so:
+This Module requires the AWS Provider and Aviatrix Providers to be defined and configured in the root module. The Module automatically creates the external S2C connections from the CSR to the specified Aviatrix Transit gateways and configures the CSR with the correct crypto settings, BGP settings, and Tunnels. Module invocation looks like so:
 
 ```terraform
 # Optionally, create multiple aliased providers to deploy multiple CSRs across regions
@@ -26,10 +26,10 @@ provider "aws" {
 # "<Aviatrix Transit Gateway Name>:<Aviatrix Transit Gateway BGP AS Number>:<Number of tunnels ***This currently only supports 1***>"
 # NOTE: Number of tunnels parameter is reserved for future use to support multi-vrf use-cases, but currently can only be set to 1.
 module "demo-onprem-1" {
-  source                                        = "github.com/gleyfer/aviatrix-demo-onprem"
-  providers                                     = { aws = aws.use1 }
-  hostname                                      = "CSROnprem-East1"
-  vpc_cidr                                      = "172.16.0.0/16"
+  source                                = "github.com/gleyfer/aviatrix-demo-onprem"
+  providers                             = { aws = aws.use1 }
+  hostname                              = "CSROnprem-East1"
+  vpc_cidr                              = "172.16.0.0/16"
   public_sub                            = "172.16.0.0/24"
   private_sub                           = "172.16.1.0/24"
   instance_type                         = "t2.medium"
@@ -40,10 +40,10 @@ module "demo-onprem-1" {
 }
 
 module "demo-onprem-2" {
-  source                                        = "github.com/gleyfer/aviatrix-demo-onprem"
-  providers                                     = { aws = aws.usw2 }
-  hostname                                      = "CSROnprem-West2"
-  vpc_cidr                                      = "172.16.0.0/16"
+  source                                = "github.com/gleyfer/aviatrix-demo-onprem"
+  providers                             = { aws = aws.usw2 }
+  hostname                              = "CSROnprem-West2"
+  vpc_cidr                              = "172.16.0.0/16"
   public_sub                            = "172.16.0.0/24"
   private_sub                           = "172.16.1.0/24"
   instance_type                         = "t2.medium"
@@ -90,6 +90,7 @@ Explanation of module arguments:
 - **instance_type (optional):** The instance type to launch the CSR with. Default is t2.medium
 - **public_conns:** List of public external connection definitions (please see above example for format). Tunnels will be created to primary and hagw automatically.
 - **private_conns:** List of private external connection definitions (For DX, please see above example for format). Tunnels will be created to primary and hagw automatically.
+- **csr_bgp_as_num:** BGP AS Number to use on the CSR.
 - **create_client (optional):** If enabled, creates an amazon linux instance in the private subnet, configures public SG to allow port 2222 and configures a port forward on the CSR to allow SSH into the test instance using the CSR EIP and port 2222. SSH Key used for the instance will either be the one specified in key_name or generated automatically. Disabled by default.
 
 Module outputs:
