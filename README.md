@@ -24,8 +24,8 @@ provider "aws" {
 # public connections (using public EIP) and private connections (e.g., using DX) 
 # are defined separately to allow mix-and-match.
 # format for the connection definition is: 
-# "avx-gw-name:avx-gw-bgp-as:num-tunnels"
-# NOTE: Please currently set num tunnels to 1. It is reserved for future use
+# "avx-gw-name:avx-gw-bgp-as:num-vrfs"
+# NOTE: Please currently set num vrfs to 1. It is reserved for future use
 module "demo-onprem-1" {
   source                                = "github.com/gleyfer/aviatrix-demo-onprem"
   providers                             = { aws = aws.use1 }
