@@ -20,12 +20,11 @@ provider "aws" {
 	region  = "us-west-2"
 }
 
-# Call the Module and provide necessary info
-# public connections (using public EIP) and 
-# private connections (using private IP over DX or VPC peering) 
-# are defined separately to allow mix-and-match
+# Call the Module and provide necessary info.
+# public connections (using public EIP) and private connections (e.g., using DX) 
+# are defined separately to allow mix-and-match.
 # format for the connection definition is: 
-# "<avx gw name>:<avx gw bgp as>:<num tunnels ***currently only supports 1***>"
+# "avx-gw-name:avx-gw-bgp-as:num-tunnels"
 # NOTE: Please currently set num tunnels to 1. It is reserved for future use
 module "demo-onprem-1" {
   source                                = "github.com/gleyfer/aviatrix-demo-onprem"
