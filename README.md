@@ -47,9 +47,11 @@ module "demo-onprem-1" {
   create_client                         = true
 }
 
+# Azure example
 module "demo-onprem-2" {
   source                                = "github.com/gleyfer/aviatrix-demo-onprem"
   providers                             = { azurerm = azurerm.dev }
+  cloud_type				= "azure"
   azure_location			= "East US"
   hostname                              = "CSROnprem-EastUS"
   network_cidr                          = "172.31.0.0/16"
