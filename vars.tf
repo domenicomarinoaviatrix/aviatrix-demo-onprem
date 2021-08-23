@@ -85,5 +85,5 @@ locals {
     ]
   ])
 
-  azure_rg = var.azure_rg == null ? azurerm_resource_group.csrOnprem[0].name : var.azure_rg
+  azure_rg = var.azure_rg == null && var.cloud_type == "azure" ? azurerm_resource_group.csrOnprem[0].name : var.azure_rg
 }
