@@ -310,6 +310,7 @@ resource "azurerm_linux_virtual_machine" "CSROnprem" {
     gateway        = data.aviatrix_transit_gateway.avtx_gateways
     hostname       = var.hostname
     test_client_ip = var.create_client ? azurerm_network_interface.testclient_nic.*.private_ip_address[count.index] : ""
+    adv_prefixes   = var.advertised_prefixes
   }))
 
   admin_ssh_key {

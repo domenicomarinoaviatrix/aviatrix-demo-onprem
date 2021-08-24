@@ -61,6 +61,9 @@ ios-config-${index(pub_conn_keys, key)}47="neighbor ${split("/", split(",", conn
 ios-config-${index(pub_conn_keys, key)}48="neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} timers 10 30 30"
 ios-config-${index(pub_conn_keys, key)}49="address-family ipv4"
 ios-config-${index(pub_conn_keys, key)}50="redistribute connected"
+%{ if length(adv_prefixes) != 0 ~}
+ios-config-${index(pub_conn_keys, key)}800="redistribute static"
+%{ endif ~}
 ios-config-${index(pub_conn_keys, key)}51="neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} activate"
 ios-config-${index(pub_conn_keys, key)}52="neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} soft-reconfiguration inbound"
 ios-config-${index(pub_conn_keys, key)}53="maximum-paths 4"
@@ -167,6 +170,9 @@ ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}47="neighbor ${s
 ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}48="neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} timers 10 30 30"
 ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}49="address-family ipv4"
 ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}50="redistribute connected"
+%{ if length(adv_prefixes) != 0 ~}
+ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}800="redistribute static"
+%{ endif ~}
 ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}51="neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} activate"
 ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}52="neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} soft-reconfiguration inbound"
 ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}53="maximum-paths 4"
@@ -219,6 +225,9 @@ ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}96="neighbor ${s
 ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}97="exit-address-family"
 ios-config-${index(priv_conn_keys, key) + length(pub_conn_keys)}98="exit"
 %{ endif ~}
+%{ endfor ~}
+%{ for index, prefix in adv_prefixes ~}
+ios-config-140${index}="ip route ${split("/", prefix)[0]} ${cidrnetmask(prefix)} Null0"
 %{ endfor ~}
 ios-config-1500="end"
 ios-config-1501="wr mem"

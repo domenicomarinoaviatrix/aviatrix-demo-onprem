@@ -56,6 +56,11 @@ variable "private_ips" {
   type    = bool
   default = false
 }
+variable "advertised_prefixes" {
+  type        = list(string)
+  description = "List of custom advertised prefixes to send over BGP to Transits"
+  default     = []
+}
 
 locals {
 

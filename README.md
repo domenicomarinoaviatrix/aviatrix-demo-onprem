@@ -47,7 +47,7 @@ module "demo-onprem-1" {
   create_client                         = true
 }
 
-# Azure example
+# Azure example with custom advertised prefixes towards Aviatrix Transit
 module "demo-onprem-2" {
   source                                = "github.com/gleyfer/aviatrix-demo-onprem"
   providers                             = { azurerm = azurerm.dev }
@@ -57,6 +57,7 @@ module "demo-onprem-2" {
   network_cidr                          = "172.31.0.0/16"
   public_sub                            = "172.31.0.0/24"
   private_sub                           = "172.31.1.0/24"
+  advertised_prefixes                   = ["10.20.0.0/16","10.30.0.0/16"]
   instance_type                         = "Standard_DS2_v2"
   public_conns                          = [ "Test-Transit:64525:1", "TestWest-Transit:64526:1"]
   private_conns                         = [ "Test-Transit:64525:1" ]
@@ -102,6 +103,7 @@ Explanation of module arguments:
 - **network_cidr:** The VPC CIDR block to use when creating the VPC/VNet which the CSR will reside in.
 - **public_sub:** The public subnet for the CSR public facing interface.
 - **private_sub:** The private subnet for the CSR private facing interface. If enabled, the test client will be created in this subnet.
+- **advertised_prefixes:** Custom list of prefixes to advertise to Aviatrix Transit. Will create static routes to Null0 for these prefixes on the CSR and redistribute static to BGP.
 - **instance_type (optional in AWS, mandatory for Azure):** The instance type to launch the CSR with. Default is t2.medium. If using Azure, set to Azure instance size instead.
 - **public_conns:** List of public external connection definitions (please see above example for format). Tunnels will be created to primary and hagw automatically.
 - **private_conns:** List of private external connection definitions (For DX, please see above example for format). Tunnels will be created to primary and hagw automatically.

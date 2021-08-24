@@ -322,6 +322,7 @@ resource "aws_instance" "CSROnprem" {
     gateway        = data.aviatrix_transit_gateway.avtx_gateways
     hostname       = var.hostname
     test_client_ip = var.create_client ? data.aws_network_interface.test_client_if[0].private_ip : ""
+    adv_prefixes   = var.advertised_prefixes
   })
 
   tags = {

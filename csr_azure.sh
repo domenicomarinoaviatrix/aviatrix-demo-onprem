@@ -62,6 +62,9 @@ neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} remote-as ${con
 neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} timers 10 30 30
 address-family ipv4
 redistribute connected
+%{ if length(adv_prefixes) != 0 ~}
+redistribute static
+%{ endif ~}
 neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} activate
 neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} soft-reconfiguration inbound
 maximum-paths 4
@@ -168,6 +171,9 @@ neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} remote-as ${con
 neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} timers 10 30 30
 address-family ipv4
 redistribute connected
+%{ if length(adv_prefixes) != 0 ~}
+redistribute static
+%{ endif ~}
 neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} activate
 neighbor ${split("/", split(",", conn.local_tunnel_cidr)[0])[0]} soft-reconfiguration inbound
 maximum-paths 4
@@ -220,6 +226,9 @@ neighbor ${split("/", split(",", conn.local_tunnel_cidr)[1])[0]} soft-reconfigur
 exit-address-family
 exit
 %{ endif ~}
+%{ endfor ~}
+%{ for index, prefix in adv_prefixes ~}
+ip route ${split("/", prefix)[0]} ${cidrnetmask(prefix)} Null0
 %{ endfor ~}
 end
 wr mem
