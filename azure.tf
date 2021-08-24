@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "csrOnprem" {
   count    = var.cloud_type == "azure" && var.azure_rg == null ? 1 : 0
-  name     = "csrOnprem-rg"
+  name     = "${var.hostname}-rg"
   location = var.azure_location
 }
 
