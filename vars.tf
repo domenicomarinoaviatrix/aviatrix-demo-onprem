@@ -6,12 +6,12 @@ variable "key_name" {
 variable "azure_location" {
   description = "Azure Region in which to deploy the CSR 1KV"
   type        = string
-  default     = "East US"
+  default     = "West Europe"
 }
 variable "azure_rg" {
   description = "Existing Azure Resource Group to deploy into"
   type        = string
-  default     = null
+  default     = "nico-management"
 }
 variable "network_cidr" {
   description = "CSR Virtual Network CIDR block"
